@@ -1,0 +1,15 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+### create an order
+POST http://localhost:9000/api/v1/orders/create
+Content-Type: application/json
+
+{
+  "orderId": "1",
+  "productId": "TV Samsung 43'",
+  "quantity": 1,
+  "amount": 95.00,
+  "customerEmail": "johndoe@gmail.com"
+}

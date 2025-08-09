@@ -1,14 +1,50 @@
-##Spring Configuration
 server:
-  port: 8080
+  port: 9000
 spring:
+  webflux:
+    base-path: "/api/v1"
   application:
-    name: app-prod-ca
+    name: "app-prod-ca"
   devtools:
     add-properties: false
   h2:
     console:
       enabled: true
-      path: /h2
+      path: "/h2"
   profiles:
-    include:
+    include: null
+  cloud:
+    stream:
+      bindings:
+        order-out-0:
+          destination: orders-topic
+          content-type: application/json
+          producer:
+            use-native-encoding: true
+        payment-out-0:
+          destination: payments-topic
+          content-type: application/json
+          producer:
+            use-native-encoding: true
+
+      kafka:
+        binder:
+          brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
+  kafka:
+    producer:
+      properties:
+        key.serializer: org.apache.kafka.common.serialization.StringSerializer
+        value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
+        spring.json.trusted.packages: 'co.com.app.model'
+        spring.json.use.type.headers: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,prometheus"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+cors:
+  allowed-origins: "http://localhost:4200,http://localhost:8080"
