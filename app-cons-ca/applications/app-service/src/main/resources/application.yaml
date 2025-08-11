@@ -1,14 +1,47 @@
-##Spring Configuration
 server:
-  port: 8080
+  port: 9001
 spring:
   application:
-    name: app-cons-ca
+    name: "app-cons-ca"
   devtools:
     add-properties: false
   h2:
     console:
       enabled: true
-      path: /h2
+      path: "/h2"
   profiles:
-    include:
+    include: null
+  cloud:
+    function:
+      definition: processOrder;processPayment
+    stream:
+      bindings:
+        processOrder-in-0:
+          destination: orders-topic
+          content-type: application/json
+          group: order-cons-group
+          consumer:
+            use-native-decoding: true
+        processPayment-in-0:
+          destination: payments-topic
+          content-type: application/json
+          group: payment-cons-group
+          consumer:
+            use-native-decoding: true
+      kafka:
+        binder:
+          brokers: ${KAFKA_HOST:localhost}:9092
+          consumer-properties:
+            key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+            spring.json.trusted.packages: 'co.com.app.model'
+            spring.json.use.type.headers: false
+        bindings:
+          processOrder-in-0:
+            consumer:
+              configuration:
+                spring.json.value.default.type: co.com.app.model.order.Order
+          processPayment-in-0:
+            consumer:
+              configuration:
+                spring.json.value.default.type: co.com.app.model.payment.Payment
