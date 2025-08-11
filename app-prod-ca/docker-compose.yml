@@ -13,6 +13,19 @@ services:
       - kafka-network
     depends_on:
       - kafka
+  app-cons-ca:
+    image: app-cons-ca-app-cons-ca:latest
+    container_name: app-cons-ca
+    ports:
+      - "9001:9001"
+    environment:
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT=9092
+    networks:
+      - kafka-network
+    depends_on:
+      - app-prod-ca
+      - kafka
 
   kafka:
     image: bitnami/kafka:3.7
@@ -28,6 +41,8 @@ services:
       # Listeners conf
       KAFKA_CFG_LISTENERS: "CONTROLLER://:9093,PLAINTEXT://:9092"
       KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092"
+      # To localhost from host machine, use the following line instead
+      # KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
       KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
 
       # KRaft specific

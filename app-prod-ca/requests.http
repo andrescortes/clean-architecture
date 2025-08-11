@@ -13,3 +13,14 @@ Content-Type: application/json
   "amount": 95.00,
   "customerEmail": "johndoe@gmail.com"
 }
+
+### create a payment
+POST http://localhost:9000/api/v1/payments/create
+Content-Type: application/json
+
+{
+    "id": "1",
+    "customerId": "1",
+    "customerName": "john doe",
+    "orderId": "1"
+}

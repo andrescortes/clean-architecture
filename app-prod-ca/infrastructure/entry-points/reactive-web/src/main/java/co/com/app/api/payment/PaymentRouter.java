@@ -1,6 +1,5 @@
 package co.com.app.api.payment;
 
-import co.com.app.api.order.OrderHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -11,8 +10,9 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 public class PaymentRouter {
+
     @Bean
-    public RouterFunction<ServerResponse> paymentRt(OrderHandler orderHandler) {
-        return route(POST("/payments/create"), orderHandler::createOrder);
+    public RouterFunction<ServerResponse> paymentRt(PaymentHandler paymentHandler) {
+        return route(POST("/payments/create"), paymentHandler::createPayment);
     }
 }
