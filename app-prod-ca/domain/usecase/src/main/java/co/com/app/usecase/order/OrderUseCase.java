@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 public class OrderUseCase {
+
     private final OrderRepository orderRepository;
 
     public Mono<String> publishOrder(Order order) {
