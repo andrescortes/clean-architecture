@@ -65,26 +65,26 @@ Running the Application
 Local Development
 Start Kafka using Docker:
 ```bash
-docker-compose -f src/main/docker/kafka.yml up -d
+   docker-compose -f src/main/docker/kafka.yml up -d
 ```
 Build and run the application:
 
 ```bash
-mvn clean install
-mvn spring-boot:run -Dspring-boot.run.profiles=dev
+   mvn clean install
+   mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 Production
 Package as a JAR and run with production profile:
 
 ```bash
-mvn clean package
-java -jar target/your-application.jar --spring.profiles.active=prod
+   mvn clean package
+   java -jar target/your-application.jar --spring.profiles.active=prod
 ```
 Testing
 Run unit and integration tests:
 
 ```bash
-mvn test
+   mvn test
 ```
 Bancolombia Plugin Commands
 If you need to modify the project structure using the Bancolombia plugin:
@@ -92,12 +92,12 @@ If you need to modify the project structure using the Bancolombia plugin:
 Generate a new use case:
 
 ```bash
-bancolombia create use-case --name=YourUseCase --package=com.yourcompany.yourproject
+   bancolombia create use-case --name=YourUseCase --package=com.yourcompany.yourproject
 ```
 Generate a new driven adapter:
 
 ```bash
-bancolombia create adapter --type=driven --name=YourRepository --package=com.yourcompany.yourproject
+   bancolombia create adapter --type=driven --name=YourRepository --package=com.yourcompany.yourproject
 ```
 Environment Variables
 For sensitive configuration, use environment variables:

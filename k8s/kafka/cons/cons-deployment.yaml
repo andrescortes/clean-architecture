@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-cons
+  namespace: kafka-app
+  labels:
+    app: app-cons
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-cons
+  template:
+    metadata:
+      labels:
+        app: app-cons
+    spec:
+      containers:
+        - name: app-cons-container
+          image: devcoderjava/app-cons-ca:latest
+          ports:
+            - containerPort: 9000
+          envFrom:
+            - configMapRef:
+               name: app-cons-configmap
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "250m"
+      initContainers:
+        - name: wait-for-kafka
+          image: busybox:1.35
+          command: ['sh', '-c']
+          args:
+            - |
+                apk add --no-cache netcat-openbsd
+                until nc -z kafka-service 9092; do
+                  echo "Waiting for Kafka to be ready..."
+                  sleep 5
+                done
+                echo "Kafka is ready!"
