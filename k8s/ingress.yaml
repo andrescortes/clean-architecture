@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: microservices-ingress
+  namespace: kafka-app
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+    - host: microservices.local
+      http:
+        paths:
+          # App producer Service
+          - path: /app-prod(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: app-prod-service
+                port:
+                  number: 9000
+          # App consumer Service
+          - path: /app-cons(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: app-cons-service
+                port:
+                  number: 9001
+          # Default backend
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app-prod-service
+                port:
+                  number: 9000
+    - host: kafka.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kafka-service
+                port:
+                  number: 9092

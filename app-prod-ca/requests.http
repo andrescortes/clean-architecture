@@ -3,7 +3,7 @@ GET https://examples.http-client.intellij.net/get
     ?generated-in=IntelliJ IDEA
 
 ### create an order
-POST http://localhost:9000/api/v1/orders/create
+POST http://microservices.local/app-prod/api/v1/orders/create
 Content-Type: application/json
 
 {
@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### create a payment
-POST http://localhost:9000/api/v1/payments/create
+POST http://microservices.local/app-prod/api/v1/payments/create
 Content-Type: application/json
 
 {

@@ -1,3 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-prod-configmap
+  namespace: kafka-app
+data:
+  KAFKA_HOST: "kafka-service"
+  KAFKA_PORT: "9092"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-prod-service
+  namespace: kafka-app
+  labels:
+    app: app-prod
+spec:
+  selector:
+    app: app-prod
+  ports:
+    - port: 9000
+      targetPort: 9000
+      protocol: TCP
+  type: ClusterIP
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,11 +43,12 @@ spec:
       containers:
         - name: app-prod-container
           image: devcoderjava/app-prod-ca:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9000
           envFrom:
             - configMapRef:
-               name: app-prod-configmap
+                name: app-prod-configmap
           resources:
             requests:
               memory: "256Mi"
@@ -33,12 +59,12 @@ spec:
       initContainers:
         - name: wait-for-kafka
           image: busybox:1.35
-          command: ['sh', '-c']
+          command: [ 'sh', '-c' ]
           args:
             - |
-                apk add --no-cache netcat-openbsd
-                until nc -z kafka-service 9092; do
-                  echo "Waiting for Kafka to be ready..."
-                  sleep 5
-                done
-                echo "Kafka is ready!"
+              apk add --no-cache netcat-openbsd
+              until nc -z kafka-service 9092; do
+                echo "Waiting for Kafka to be ready..."
+                sleep 5
+              done
+              echo "Kafka is ready!"
